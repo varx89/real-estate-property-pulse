@@ -10,6 +10,7 @@ import { signIn, signOut, useSession, getProviders } from 'next-auth/react';
 
 const Navbar = () => {
     const { data: session } = useSession();
+    const profileImage = session?.user?.image;
 
     const [isMobileMenuOpen, setisMobileMenuOpen] = useState(false);
     const [isProfileMenuOpen, setisProfileMenuOpen] = useState(false);
@@ -143,7 +144,7 @@ const Navbar = () => {
                                     type="button"
                                     className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                 >
-                                    <span className="absolute -inset-1.5"></span>
+                                    <span className="absolute -inset-1.5 cursor-pointer"></span>
                                     <span className="sr-only">
                                         View notifications
                                     </span>
@@ -182,13 +183,15 @@ const Navbar = () => {
                                             )
                                         }
                                     >
-                                        <span className="absolute -inset-1.5"></span>
+                                        <span className="absolute -inset-1.5 cursor-pointer"></span>
                                         <span className="sr-only">
                                             Open user menu
                                         </span>
                                         <Image
-                                            className="h-8 w-8 rounded-full"
-                                            src={profileDefault}
+                                            className="h-8 w-8 rounded-full cursor-pointer"
+                                            src={profileImage || profileDefault}
+                                            width={40}
+                                            height={40}
                                             alt="Profile"
                                         />
                                     </button>
@@ -223,10 +226,14 @@ const Navbar = () => {
                                             Saved Properties
                                         </Link>
                                         <button
-                                            className="block px-4 py-2 text-sm text-gray-700"
+                                            className="block px-4 py-2 text-sm text-gray-700 cursor-pointer"
                                             role="menuitem"
                                             tabIndex="-1"
                                             id="user-menu-item-2"
+                                            onClick={() => {
+                                                setisProfileMenuOpen(false);
+                                                signOut();
+                                            }}
                                         >
                                             Sign Out
                                         </button>
